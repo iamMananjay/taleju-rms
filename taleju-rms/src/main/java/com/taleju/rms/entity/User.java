@@ -1,32 +1,36 @@
 package com.taleju.rms.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
-@Table(name = "users")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EqualsAndHashCode.Include
+    private Long id; // ✅ use ID only for equality
+
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false , unique = true)
+
+    @Column(nullable = false, unique = true)
     private String email;
+
     @Column(nullable = false)
     private String password;
+
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
     @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = true)
+    @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant; // Null for Admins
-
-
 }

@@ -3,8 +3,10 @@ package com.taleju.rms.service;
 import com.taleju.rms.config.JwtService;
 import com.taleju.rms.dto.LoginRequest;
 import com.taleju.rms.dto.RegisterRequest;
+import com.taleju.rms.entity.Restaurant;
 import com.taleju.rms.entity.Role;
 import com.taleju.rms.entity.User;
+import com.taleju.rms.repository.RestaurantRepository;
 import com.taleju.rms.repository.RoleRepository;
 import com.taleju.rms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class AuthService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -40,6 +45,14 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(role);
+        if (request.getRestaurantId() != null) {
+            Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
+                    .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+            user.setRestaurant(restaurant);
+        } else {
+            user.setRestaurant(null);
+        }
+
 
         userRepository.save(user);
         return jwtService.generateToken(user.getEmail());
