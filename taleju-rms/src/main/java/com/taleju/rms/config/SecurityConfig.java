@@ -32,8 +32,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/subscription-plans/**", "/api/subscriptions/**").hasRole("ADMIN")
                         .requestMatchers("/api/restaurants/**").hasRole("ADMIN")
                         .requestMatchers("/api/categories/**", "/api/menu-items/**").hasAnyRole("ADMIN", "MANAGER")
-                        .requestMatchers("/api/tables/scan").permitAll() // anyone can scan QR
                         .requestMatchers("/api/tables/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/api/payments/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

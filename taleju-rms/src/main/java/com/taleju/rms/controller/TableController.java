@@ -46,6 +46,4 @@ public class TableController {
         tableService.deleteTable(tableNumber);
         return ResponseEntity.ok("Table deleted successfully");
     }
-
-
 }
