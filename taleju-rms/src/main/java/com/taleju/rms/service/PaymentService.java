@@ -7,6 +7,7 @@ import com.taleju.rms.entity.Payment;
 import com.taleju.rms.enums.PaymentStatus;
 import com.taleju.rms.repository.OrderRepository;
 import com.taleju.rms.repository.PaymentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static com.taleju.rms.enums.PaymentStatus.PAID;
@@ -17,6 +18,8 @@ import static com.taleju.rms.enums.OrderStatus.PREPARING;
 public class PaymentService {
     private final PaymentRepository paymentRepo;
     private final OrderRepository orderRepo;
+    @Autowired
+    private KitchenOrderService kitchenOrderService;
 
     public PaymentService(PaymentRepository paymentRepo, OrderRepository orderRepo) {
         this.paymentRepo = paymentRepo;
@@ -47,6 +50,8 @@ public class PaymentService {
 
         Payment savedPayment = paymentRepo.save(payment);
 
+        // 6. Create Kitchen Order automatically after payment
+        kitchenOrderService.createKitchenOrder(order.getId());
         // 5. Update order payment + order status
         order.setPaymentStatus(PAID);
         order.setOrderStatus(PREPARING);
