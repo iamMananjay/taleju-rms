@@ -21,9 +21,9 @@ public class Order {
     @Column(unique = true)
     private String orderNumber;
 
-//    @ManyToOne
-//    @JoinColumn(name = "table_id")
-//    private Table table;
+    @ManyToOne
+    @JoinColumn(name = "table_id")
+    private TableEntity table;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

@@ -25,8 +25,8 @@ public class OrderService {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
-//    @Autowired
-//    private TableRepository tableRepository;
+    @Autowired
+    private TableRepository tableRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -45,9 +45,9 @@ public class OrderService {
         // Generate order number
         order.setOrderNumber("ORD-" + System.currentTimeMillis());
 
-//        Table table = tableRepository.findById(request.getTableId())
-//                .orElseThrow(() -> new RuntimeException("Table not found"));
-//        order.setTable(table);
+        TableEntity table = tableRepository.findByTableNumber(request.getTableNumber())
+                .orElse(null);
+        order.setTable(table);
 
         User customer;
         if (loggedInEmail != null) {
@@ -111,6 +111,10 @@ public class OrderService {
         if(order.getOrderStatus() == OrderStatus.SERVED || order.getOrderStatus() == OrderStatus.COMPLETED) {
             throw new RuntimeException("Cannot modify order that is already served or completed");
         }
+        TableEntity table = tableRepository.findByTableNumber(request.getTableNumber())
+                .orElse(null);
+
+        order.setTable(table);
 
         order.getOrderItems().clear(); // Remove old items
         double total = 0.0;

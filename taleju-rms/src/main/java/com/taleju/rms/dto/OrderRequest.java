@@ -10,4 +10,5 @@ public class OrderRequest {
     private OrderType orderType;
     private List<OrderItemRequest> items;
     private Long restaurant;
+    private String tableNumber;
 }
